@@ -9,7 +9,7 @@ services:
         - ./public:/var/www/public/
         - ./docker/nginx:/etc/nginx/conf.d/
       depends_on:
-        - db
+        - php
 
     php:
       build:
@@ -17,6 +17,8 @@ services:
         dockerfile: ./Dockerfile
       volumes:
         - ./:/var/www
+      depends_on:
+        - db
 
     db:
       image: mariadb:10.3-bionic
