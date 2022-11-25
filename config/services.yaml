@@ -31,3 +31,13 @@ services:
         class: App\Admin\UserAdmin
         tags:
             - { name: sonata.admin, model_class: App\Entity\User, manager_type: orm, label: 'User' }
+
+    admin.company:
+        class: App\Admin\CompanyAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Company, manager_type: orm, label: 'Company' }
+
+    admin.candidate:
+        class: App\Admin\CandidateAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Candidate, manager_type: orm, label: 'Candidate' }

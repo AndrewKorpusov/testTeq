@@ -7,7 +7,7 @@ security:
             algorithm: auto
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     role_hierarchy:
-        ROLE_ADMIN: [ROLE_ADMIN, ROLE_ADMIN_USER_ALL ]
+        ROLE_ADMIN: [ROLE_ADMIN, ROLE_ADMIN_USER_ALL, ROLE_ADMIN_COMPANY_ALL, ROLE_ADMIN_CANDIDATE_ALL ]
         ROLE_COMPANY: []
         ROLE_USER: [ROLE_USER]
 
