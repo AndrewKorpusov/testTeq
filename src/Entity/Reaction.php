@@ -8,6 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\HasLifecycleCallbacks]
 class Reaction
 {
+    const TYPE_POSITIVE = 1;
+    const TYPE_NEGATIVE = -1;
+
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: "AUTO")]
     #[ORM\Column(type: "integer")]
@@ -25,7 +28,7 @@ class Reaction
     #[ORM\Column(type: 'datetime')]
     private \DateTime $createdAt;
 
-    #[ORM\Column(type: "boolean")]
+    #[ORM\Column(type: "boolean", options: ['default'=>1])]
     private bool $isActive;
 
     /**
@@ -34,14 +37,6 @@ class Reaction
     public function getId(): int
     {
         return $this->id;
-    }
-
-    /**
-     * @param int $id
-     */
-    public function setId(int $id): void
-    {
-        $this->id = $id;
     }
 
     /**
@@ -54,10 +49,13 @@ class Reaction
 
     /**
      * @param int $type
+     * @return self
      */
-    public function setType(int $type): void
+    public function setType(int $type): self
     {
         $this->type = $type;
+
+        return $this;
     }
 
     /**
@@ -70,10 +68,13 @@ class Reaction
 
     /**
      * @param CV $cv
+     * @return self
      */
-    public function setCv(?CV $cv): void
+    public function setCv(?CV $cv): self
     {
         $this->cv = $cv;
+
+        return $this;
     }
 
     /**
@@ -86,10 +87,13 @@ class Reaction
 
     /**
      * @param Company $company
+     * @return self
      */
-    public function setCompany(Company $company): void
+    public function setCompany(Company $company): self
     {
         $this->company = $company;
+
+        return $this;
     }
 
     /**
@@ -102,10 +106,13 @@ class Reaction
 
     /**
      * @param \DateTime $createdAt
+     * @return self
      */
-    public function setCreatedAt(\DateTime $createdAt): void
+    public function setCreatedAt(\DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
     }
 
     /**
@@ -118,10 +125,13 @@ class Reaction
 
     /**
      * @param bool $isActive
+     * @return self
      */
-    public function setIsActive(bool $isActive): void
+    public function setIsActive(bool $isActive): self
     {
         $this->isActive = $isActive;
+
+        return $this;
     }
 
     #[ORM\PrePersist]

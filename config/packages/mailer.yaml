@@ -1,0 +1,5 @@
+framework:
+    mailer:
+        envelope:
+            sender: 'teq@test.teq'
+        dsn: '%env(MAILER_DSN)%'

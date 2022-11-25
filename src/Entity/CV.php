@@ -44,7 +44,7 @@ class CV
     #[Column(type: 'datetime')]
     private \DateTime $updatedAt;
 
-    #[Column(type: 'boolean')]
+    #[Column(type: 'boolean', options: ['default'=>1])]
     private bool $isActive;
 
     public function __construct()

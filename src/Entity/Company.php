@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\OneToOne;
 
 #[Entity]
 class Company
@@ -27,10 +28,13 @@ class Company
     #[Column(type: 'string', unique: true)]
     private string $phone;
 
+    #[OneToOne(targetEntity: User::class, inversedBy: 'company')]
+    private User $user;
+
     #[Column(type: 'datetime')]
     private \DateTime $createdAt;
 
-    #[Column(type: 'boolean')]
+    #[Column(type: 'boolean', options: ['default'=>1])]
     private bool $isActive;
 
     /**

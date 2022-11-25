@@ -21,6 +21,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
+    #[ORM\OneToOne(targetEntity: Company::class, inversedBy: 'user')]
+    private Company $company;
+
     #[ORM\Column]
     private array $roles = [];
 

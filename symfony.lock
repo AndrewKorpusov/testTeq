@@ -41,6 +41,19 @@
     "knplabs/knp-menu-bundle": {
         "version": "v3.2.0"
     },
+    "php-amqplib/rabbitmq-bundle": {
+        "version": "2.11",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "1.12",
+            "ref": "ce3ca2e4577270c4f518539aa6b9e878998fcfef"
+        },
+        "files": [
+            "config/packages/old_sound_rabbit_mq.yaml",
+            "src/Consumer/.gitignore"
+        ]
+    },
     "sonata-project/admin-bundle": {
         "version": "4.21",
         "recipe": {
@@ -95,10 +108,7 @@
             "branch": "main",
             "version": "1.4",
             "ref": "9c8a1e8ce2b1f215015ed16652c4ed18eb5867fd"
-        },
-        "files": [
-            "config/packages/sonata_form.yaml"
-        ]
+        }
     },
     "sonata-project/twig-extensions": {
         "version": "2.0",
@@ -150,6 +160,18 @@
             "public/index.php",
             "src/Controller/.gitignore",
             "src/Kernel.php"
+        ]
+    },
+    "symfony/mailer": {
+        "version": "5.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "4.3",
+            "ref": "97a61eabb351d7f6cb7702039bcfe07fe9d7e03c"
+        },
+        "files": [
+            "config/packages/mailer.yaml"
         ]
     },
     "symfony/maker-bundle": {

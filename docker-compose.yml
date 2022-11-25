@@ -31,3 +31,17 @@ services:
         - MYSQL_PASSWORD=root
       ports:
         - "3303:3306"
+
+    rabbitmq:
+        image: rabbitmq:3.8.9-management
+        env_file:
+          - .rabbitmq.env
+        ports:
+          - "5672:5672"
+          - "15672:15672"
+
+    ###> symfony/mailer ###
+    mailer:
+        image: schickling/mailcatcher
+        ports: [1025, 1080]
+    ###< symfony/mailer ###
