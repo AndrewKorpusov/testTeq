@@ -3,13 +3,18 @@ security:
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+        App\Entity\User:
+            algorithm: auto
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     role_hierarchy:
         ROLE_ADMIN: [ROLE_ADMIN, ROLE_ADMIN_USER_ALL ]
-        ROLE_USER: [ROLE_USER, ROLE_ADMIN_USER_ALL]
+        ROLE_COMPANY: []
+        ROLE_USER: [ROLE_USER]
 
 
     providers:
+        admin_user_provider:
+            id: App\Security\UserProvider
         # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
             entity:
@@ -21,6 +26,7 @@ security:
             security: false
         admin:
             pattern: ^/admin(.*)
+            provider: admin_user_provider
             entry_point: App\Security\AdminLoginAuthenticator
             form_login:
                 login_path:     admin_login

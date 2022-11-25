@@ -43,7 +43,8 @@ class UserAdmin extends AbstractAdmin
             ->add('_action', 'actions', [
                 'actions' => [
                     'edit' => [],
-                    'show' => []
+                    'show' => [],
+                    'delete' => []
                 ]
             ]);
     }
