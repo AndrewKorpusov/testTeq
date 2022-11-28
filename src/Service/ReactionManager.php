@@ -32,7 +32,7 @@ class ReactionManager
         }
     }
 
-    private function removeReaction(CV $CV, ReactionInterface $reaction)
+    private function removeReaction(CV $CV, ReactionInterface $reaction): void
     {
         $repository = $this->entityManager->getRepository(Reaction::class);
 
@@ -51,7 +51,7 @@ class ReactionManager
     }
 
 
-    private function checkReactionIsExisted(CV $cv, ReactionInterface $reaction)
+    private function checkReactionIsExisted(CV $cv, ReactionInterface $reaction): int
     {
         return $this->entityManager->getRepository(Reaction::class)->count([
             'company' => $this->user->getCompany(),

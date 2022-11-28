@@ -22,6 +22,9 @@ class Candidate
     #[ORM\Column(type: 'datetime')]
     private \DateTime $createdAt;
 
+    #[ORM\Column(type: 'boolean', options: ['{default:1}'])]
+    private bool $isActive;
+
     /**
      * @return int
      */
@@ -85,6 +88,31 @@ class Candidate
         $this->createdAt = $createdAt;
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActive(): bool
+    {
+        return $this->isActive;
+    }
+
+    /**
+     * @param bool $isActive
+     * @return self
+     */
+    public function setIsActive(bool $isActive): self
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    #[ORM\PrePersist]
+    public function prePersist()
+    {
+        $this->createdAt = new \DateTime();
     }
 
 
