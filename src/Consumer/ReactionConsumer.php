@@ -16,6 +16,6 @@ class ReactionConsumer implements ConsumerInterface
 
     public function execute(AMQPMessage $msg)
     {
-
+        //TODO: Find all reactions for CV and send email to candidate
     }
 }
