@@ -5,6 +5,7 @@ namespace App\EventListener;
 
 use App\Entity\User;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserListener
@@ -13,18 +14,23 @@ class UserListener
     {
     }
 
-    public function preUpdate(PreUpdateEventArgs $args)
+    public function prePersist(User $user, LifecycleEventArgs $args)
     {
-        $entity = $args->getObject();
-
-        if ($entity instanceof User ) {
-            if (!empty($entity->getPassword())) {
-                $entity->setPassword($this->passwordHasher->hashPassword($entity, $entity->getPassword()));
-            } else {
-                if ($args->hasChangedField('password')) {
-                    $entity->setPassword($args->getOldValue('password'));
-                }
+        $this->hashPassword($user);
+    }
+    public function preUpdate(User $user, PreUpdateEventArgs $args)
+    {
+        if (!empty($user->getPassword())) {
+            $this->hashPassword($user);
+        } else {
+            if ($args->hasChangedField('password')) {
+                $user->setPassword($args->getOldValue('password'));
             }
         }
+    }
+
+    private function hashPassword(User $entity)
+    {
+        $entity->setPassword($this->passwordHasher->hashPassword($entity, $entity->getPassword()));
     }
 }

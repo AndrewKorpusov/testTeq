@@ -2,40 +2,49 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\Id;
-use Doctrine\ORM\Mapping\OneToOne;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 
-#[Entity]
+#[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
 class Company
 {
-    #[Id]
-    #[GeneratedValue(strategy: 'AUTO')]
-    #[Column(type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\Column(type: 'integer')]
     private int $id;
 
-    #[Column(type: 'string', unique: true)]
+    #[ORM\Column(type: 'string', unique: true)]
     private string $name;
 
-    #[Column(type: 'string', nullable: true)]
-    private string $url;
+    #[ORM\Column(type: 'string', nullable: true)]
+    private ?string $url;
 
-    #[Column(type: 'string', nullable: true)]
+    #[ORM\Column(type: 'string', nullable: true)]
     private string $address;
 
-    #[Column(type: 'string', unique: true)]
+    #[ORM\Column(type: 'string', unique: true)]
     private string $phone;
 
-    #[OneToOne(targetEntity: User::class, inversedBy: 'company')]
+    #[ORM\OneToOne(targetEntity: User::class, inversedBy: 'company', cascade: ['persist'])]
     private User $user;
 
-    #[Column(type: 'datetime')]
+    #[ORM\JoinTable(name: 'companies_cvs')]
+    #[ORM\InverseJoinColumn(name: 'cv_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: CV::class)]
+    private Collection $cvs;
+
+    #[ORM\Column(type: 'datetime')]
     private \DateTime $createdAt;
 
-    #[Column(type: 'boolean', options: ['default'=>1])]
+    #[ORM\Column(type: 'boolean', options: ['{default:1}'])]
     private bool $isActive;
+
+    public function __construct()
+    {
+        $this->cvs = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -67,7 +76,7 @@ class Company
     /**
      * @return string
      */
-    public function getUrl(): string
+    public function getUrl(): ?string
     {
         return $this->url;
     }
@@ -76,7 +85,7 @@ class Company
      * @param string $url
      * @return self
      */
-    public function setUrl(string $url): self
+    public function setUrl(?string $url): self
     {
         $this->url = $url;
 
@@ -159,5 +168,50 @@ class Company
         return $this;
     }
 
+    /**
+     * @return User
+     */
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     */
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getCvs(): Collection
+    {
+        return $this->cvs;
+    }
+
+    /**
+     * @param CV $cv
+     */
+    public function addCV(CV $cv): self
+    {
+        if (!$this->cvs->contains($cv)) {
+            $cv->addCompany($this);
+            $this->cvs->add($cv);
+        }
+
+        return $this;
+    }
+
+
+    #[ORM\PrePersist]
+    public function prePersist()
+    {
+        $this->createdAt = new \DateTime();
+    }
 
 }

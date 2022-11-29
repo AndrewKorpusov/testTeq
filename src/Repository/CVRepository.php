@@ -12,4 +12,9 @@ class CVRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, CV::class);
     }
+
+    public function findCVStatistics()
+    {
+
+    }
 }

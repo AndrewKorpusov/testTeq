@@ -2,19 +2,24 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Action\PlaceholderAction;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
-use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\PrePersist;
 use Doctrine\ORM\Mapping\PreUpdate;
 
-#[Entity]
+#[ApiResource]
+#[Entity(repositoryClass: \App\Repository\CVRepository::class)]
 #[HasLifecycleCallbacks]
 class CV
 {
@@ -30,7 +35,10 @@ class CV
     private Candidate $candidate;
 
     #[OneToMany(targetEntity: Reaction::class, mappedBy: 'cv')]
-    private ArrayCollection $reactions;
+    private Collection $reactions;
+
+    #[ManyToMany(targetEntity: Company::class, mappedBy: 'cvs')]
+    private Collection $companies;
 
     #[Column(type: 'text')]
     private string $text;
@@ -44,12 +52,13 @@ class CV
     #[Column(type: 'datetime')]
     private \DateTime $updatedAt;
 
-    #[Column(type: 'boolean', options: ['default'=>1])]
+    #[Column(type: 'boolean', options:  ['{default:1}'])]
     private bool $isActive;
 
     public function __construct()
     {
         $this->reactions = new ArrayCollection();
+        $this->companies = new ArrayCollection();
     }
 
     /**
@@ -233,4 +242,24 @@ class CV
     {
         $this->updatedAt = new \DateTime();
     }
+
+    /**
+     * @return Collection
+     */
+    public function getCompanies(): Collection
+    {
+        return $this->companies;
+    }
+
+    /**
+     * @param Company $company
+     */
+    public function addCompany(Company $company): self
+    {
+        $this->companies->add($company);
+
+        return $this;
+    }
+
+
 }

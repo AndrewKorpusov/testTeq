@@ -103,6 +103,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
+     * @return Company
+     */
+    public function getCompany(): Company
+    {
+        return $this->company;
+    }
+
+    /**
+     * @param Company $company
+     * @return self
+     */
+    public function setCompany(Company $company): self
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
+
+
+    /**
      * Returning a salt is only needed, if you are not using a modern
      * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
      *

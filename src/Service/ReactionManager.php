@@ -4,45 +4,59 @@ namespace App\Service;
 
 use App\Entity\CV;
 use App\Entity\Reaction;
+use App\Service\Reaction\ReactionInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Security;
 
 class ReactionManager
 {
-    public function __construct(private EntityManagerInterface $entityManager, private Security $security)
+    private $user;
+
+    public function __construct(private EntityManagerInterface $entityManager, private UserManager $userManager)
     {
     }
 
-    public function findReactionsToSend()
+    public function addReaction(CV $cv, ReactionInterface $reaction): void
     {
-        $reactionsRepository = $this->entityManager->getRepository(Reaction::class);
+        $this->user = $this->userManager->getUser();
 
-        $reactions = $reactionsRepository->findReactionsToNotify();
-
-    }
-
-
-    public function addReaction(CV $cv, $type): void
-    {
-        if ($this->checkReactionIsExisted($cv, $type)) {
-            $this->removeReaction($cv, $type);
+        if ($this->checkReactionIsExisted($cv, $reaction)) {
+            $this->removeReaction($cv, $reaction);
         } else {
             $reaction = (new Reaction())
                 ->setCv($cv)
-                ->setCompany()
-                ->setType($type);
+                ->setCompany($this->user->getCompany())
+                ->setType($reaction->getType());
+
+            $this->entityManager->persist($reaction);
+            $this->entityManager->flush();
+        }
+    }
+
+    private function removeReaction(CV $CV, ReactionInterface $reaction): void
+    {
+        $repository = $this->entityManager->getRepository(Reaction::class);
+
+        $reaction = $repository->findOneBy([
+            'cv' => $CV,
+            'company' => $this->user->getCompany(),
+            'reaction' => $reaction->getType()
+        ]);
+
+        if ($reaction) {
+            $CV->removeReaction($reaction);
+            $this->entityManager->remove($reaction);
+
+            $this->entityManager->flush();
         }
     }
 
 
-    private function checkReactionIsExisted(CV $cv, $type)
+    private function checkReactionIsExisted(CV $cv, ReactionInterface $reaction): int
     {
-        $user = $this->security->getUser();
-
         return $this->entityManager->getRepository(Reaction::class)->count([
-            'company' => $user->getCompany(),
+            'company' => $this->user->getCompany(),
             'cv' => $cv,
-            'type' => $type
+            'type' => $reaction->getType()
         ]);
     }
 }

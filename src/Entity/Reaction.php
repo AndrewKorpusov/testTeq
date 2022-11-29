@@ -28,7 +28,7 @@ class Reaction
     #[ORM\Column(type: 'datetime')]
     private \DateTime $createdAt;
 
-    #[ORM\Column(type: "boolean", options: ['default'=>1])]
+    #[ORM\Column(type: "boolean", options:  ['{default:1}'])]
     private bool $isActive;
 
     /**
