@@ -10,6 +10,7 @@
         "doctrine/doctrine-bundle": "^2.7",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.13",
+        "lexik/jwt-authentication-bundle": "^2.16",
         "php-amqplib/rabbitmq-bundle": "^2.11",
         "sonata-project/admin-bundle": "^4.21",
         "sonata-project/doctrine-orm-admin-bundle": "^4.8",

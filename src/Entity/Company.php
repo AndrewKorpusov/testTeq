@@ -19,7 +19,7 @@ class Company
     private string $name;
 
     #[ORM\Column(type: 'string', nullable: true)]
-    private string $url;
+    private ?string $url;
 
     #[ORM\Column(type: 'string', nullable: true)]
     private string $address;
@@ -76,7 +76,7 @@ class Company
     /**
      * @return string
      */
-    public function getUrl(): string
+    public function getUrl(): ?string
     {
         return $this->url;
     }
@@ -85,7 +85,7 @@ class Company
      * @param string $url
      * @return self
      */
-    public function setUrl(string $url): self
+    public function setUrl(?string $url): self
     {
         $this->url = $url;
 
